@@ -54,7 +54,7 @@ class tse_dockerhost (
     action => accept,
   }
   exec { 'ifup':
-    command     => "/sbin/ifup $::interface",
+    command     => "/sbin/ifup $tse_dockerhost::interface",
     refreshonly => true,
   }
 }
