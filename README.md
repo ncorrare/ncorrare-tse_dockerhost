@@ -9,71 +9,30 @@
     * [Setup requirements](#setup-requirements)
     * [Beginning with tse_dockerhost](#beginning-with-tse_dockerhost)
 4. [Usage - Configuration options and additional functionality](#usage)
-5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 5. [Limitations - OS compatibility, etc.](#limitations)
-6. [Development - Guide for contributing to the module](#development)
 
 ## Overview
 
-A one-maybe-two sentence summary of what the module does/what problem it solves.
-This is your 30 second elevator pitch for your module. Consider including
-OS/Puppet version it works with.
+This module sets up a Ghost Blog on a Docker container.
 
 ## Module Description
-
-If applicable, this section should have a brief description of the technology
-the module integrates with and what that integration enables. This section
-should answer the questions: "What does this module *do*?" and "Why would I use
-it?"
-
-If your module has a range of functionality (installation, configuration,
-management, etc.) this is the time to mention it.
+This modules sets up docker, and creates a new container using the "Ghost" image from the Docker repository. It also forwards the necessary ports and adds the firewall rules.
 
 ## Setup
 
 ### What tse_dockerhost affects
 
-* A list of files, packages, services, or operations that the module will alter,
-  impact, or execute on the system it's installed on.
-* This is a great place to stick any warnings.
-* Can be in list or paragraph form.
+* It creates a systemd service file to manage the container.
+* Deploys the image from the Docker repository.
+* Forward ports 80 and 2368 to the container and open the ports.
 
-### Setup Requirements **OPTIONAL**
-
-If your module requires anything extra before setting up (pluginsync enabled,
-etc.), mention it here.
+### Setup Requirements
+For some reason, when deploying Docker, the static internal ip configuration is lost. If this happens to you, please pass an interface string variable to the class, so it does an ifup on it when the container is up.
 
 ### Beginning with tse_dockerhost
 
-The very basic steps needed for a user to get the module up and running.
-
-If your most recent release breaks compatibility or requires particular steps
-for upgrading, you may wish to include an additional section here: Upgrading
-(For an example, see http://forge.puppetlabs.com/puppetlabs/firewall).
-
-## Usage
-
-Put the classes, types, and resources for customizing, configuring, and doing
-the fancy stuff with your module here.
-
-## Reference
-
-Here, list the classes, types, providers, facts, etc contained in your module.
-This section should include all of the under-the-hood workings of your module so
-people know what the module is touching on their system but don't need to mess
-with things. (We are working on automating this section!)
+In the Enterprise Node Classifier, just assing the class to the group. Or puppet apply -t -e 'include tse_dockerhost'.
 
 ## Limitations
+This has been tested on RHEL 7 only.
 
-This is where you list OS compatibility, version compatibility, etc.
-
-## Development
-
-Since your module is awesome, other users will want to play with it. Let them
-know what the ground rules for contributing are.
-
-## Release Notes/Contributors/Etc **Optional**
-
-If you aren't using changelog, put your release notes here (though you should
-consider using changelog). You may also add any additional sections you feel are
-necessary or important to include here. Please use the `## ` header.
