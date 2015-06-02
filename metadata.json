@@ -9,6 +9,7 @@
   "issues_url": "https://github.com/ncorrare/ncorrare-tse_dockerhost/issues",
   "dependencies": [
     {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+    {"name":"puppetlabs-docker_platform","version_requirement":">= 1.0.0"}
   ]
 }
 

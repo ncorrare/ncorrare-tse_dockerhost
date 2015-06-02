@@ -1,41 +1,60 @@
 # == Class: tse_dockerhost
 #
-# Full description of class tse_dockerhost here.
+# A demo module to set up a docker container with the "Ghost" Blogging Platform
 #
 # === Parameters
 #
-# Document parameters here.
-#
-# [*sample_parameter*]
-#   Explanation of what this parameter affects and what it defaults to.
-#   e.g. "Specify one or more upstream ntp servers as an array."
-#
-# === Variables
-#
-# Here you should define a list of variables that this module would require.
-#
-# [*sample_variable*]
-#   Explanation of how this variable affects the funtion of this class and if
-#   it has a default. e.g. "The parameter enc_ntp_servers must be set by the
-#   External Node Classifier as a comma separated list of hostnames." (Note,
-#   global variables should be avoided in favor of class parameters as
-#   of Puppet 2.6.)
+# [*interface*]
+#   When the docker service is started for the first time in our demo environment, it unconfigures the secondary interface for some reason. As a quick workaround, please specify the interface here to run an ifup on it when the Catalog compilation is over.
 #
 # === Examples
 #
 #  class { 'tse_dockerhost':
-#    servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
+#    interface => 'enp0s8',
 #  }
 #
 # === Authors
 #
-# Author Name <author@domain.com>
+# Nicolas Corrarello <nicolas@corrarello.com>
 #
 # === Copyright
 #
-# Copyright 2015 Your name here, unless otherwise noted.
+# Copyright 2015 Nicolas Corrarello, unless otherwise noted.
 #
-class tse_dockerhost {
-
-
+class tse_dockerhost (
+  $interface = undef,
+)
+  {
+ class { 'docker':
+  }
+  docker::image { 'ghost':
+    require => Class['docker'],
+  }
+  if $interface {
+    docker::run { 'ghostblog':
+      image   => 'ghost',
+      command => 'npm start',
+      require => Docker::Image['ghost'],
+      ports   => ['80:2368','2368:2368'],
+      notify  => Exec['ifup'],
+    }
+  }
+    else
+    {
+      docker::run { 'ghostblog':
+        image   => 'ghost',
+        command => 'npm start',
+        require => Docker::Image['ghost'],
+        ports   => ['80:2368','2368:2368'],
+      }
+    }
+    firewall { '100 allow http and https access':
+    port   => [80, 2368],
+    proto  => tcp,
+    action => accept,
+  }
+  exec { 'ifup':
+    command     => "/sbin/ifup $::interface",
+    refreshonly => true,
+  }
 }
