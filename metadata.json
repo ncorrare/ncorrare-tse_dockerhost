@@ -1,0 +1,14 @@
+{
+  "name": "ncorrare-tse_dockerhost",
+  "version": "0.1.0",
+  "author": "ncorrare",
+  "summary": "A demo module to set up a docker container with the \"Ghost\" Blogging Platform",
+  "license": "Apache 2.0",
+  "source": "https://github.com/ncorrare/ncorrare-tse_dockerhost",
+  "project_page": "https://github.com/ncorrare/ncorrare-tse_dockerhost",
+  "issues_url": "https://github.com/ncorrare/ncorrare-tse_dockerhost/issues",
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ]
+}
+
